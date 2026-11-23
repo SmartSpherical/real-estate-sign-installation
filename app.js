@@ -370,8 +370,15 @@
       status.textContent = ui("form.sending");
       try {
         const res = await fetch(c.formEndpoint, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify({ ...data, service: svcName, estimate: attachEstimate ? estimateSummary() : "", _subject: ui("msg.hello"), message_full: body }) });
-        if (!res.ok) throw new Error(res.status);
+          body: JSON.stringify({
+            _subject: `${ui("msg.hello")} – ${data.name}`, _template: "table", _captcha: "false",
+            Name: data.name, Phone: data.phone, Email: data.email || "-", Service: svcName,
+            "Listing address": data.location || "-", Message: data.message || "-",
+            Estimate: attachEstimate ? estimateSummary() : "-", Language: lang === "zh" ? "中文" : "English",
+            ...(data.email ? { _replyto: data.email } : {}),
+          }) });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || String(json.success) === "false") throw new Error(json.message || res.status);
         status.textContent = ui("form.ok"); status.classList.add("ok"); f.reset(); $("#formEstimateView").hidden = true; attachEstimate = false;
       } catch { status.textContent = ui("form.err"); status.classList.add("err"); }
       return;

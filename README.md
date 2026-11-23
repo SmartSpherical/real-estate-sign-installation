@@ -30,12 +30,13 @@ Rules of thumb:
 
 ### Getting quote requests by email
 
-Right now the quote form opens a pre-filled text message to your phone and copies the request so it can also be pasted into WeChat.
-To receive requests by email instead, create a free form at <https://formspree.io>, then paste its URL into `contact.formEndpoint`.
+Quote requests are emailed to **garylamrealty@outlook.com** through [FormSubmit](https://formsubmit.co) (free, no account).
+The very first request sends a one-time **activation email** to that inbox. Click the link in it, and every request after that arrives as a normal email (reply goes straight to the customer if they gave an email).
+To change the address, edit the end of `contact.formEndpoint` in `config.js`.
 
 ### After big edits
 
-If a change doesn't show up, browsers may be holding an old copy. In `index.html`, bump the number in `?v=6` (on the 5 lines that load `styles.css`, `config.js`, `i18n.js`, `app.js` and `scene.js`) to `?v=7`.
+If a change doesn't show up, browsers may be holding an old copy. In `index.html`, bump the number in `?v=7` (on the 5 lines that load `styles.css`, `config.js`, `i18n.js`, `app.js` and `scene.js`) to `?v=8`, and so on.
 
 ## Files
 

@@ -45,7 +45,7 @@ window.SITE = {
     phone: "(416) 200-8386",               // how it is displayed
     phoneLink: "+14162008386",             // digits only, used for tap-to-call / text
     wechat: "GaryLamRealty",               // WeChat ID, or "" to hide
-    email: "",                             // add an email address to show it, or "" to hide
+    email: "garylamrealty@outlook.com",    // shown on the site; "" to hide
     address: { en: "Serving the Greater Toronto Area", zh: "服务大多伦多地区" },
     serviceArea: {
       en: "Toronto · Markham · Richmond Hill · Vaughan · Mississauga · Scarborough",
@@ -60,12 +60,11 @@ window.SITE = {
     instagram: "",                         // full URL, or "" to hide
     facebook: "",                          // full URL, or "" to hide
 
-    /* Quote form delivery:
-       • formEndpoint set (free at https://formspree.io) → requests arrive in your inbox.
-       • otherwise, if email is set → opens the visitor's email app, pre-filled.
-       • otherwise → opens a pre-filled text message to your phone, and copies
-         the request so the visitor can paste it into WeChat.                */
-    formEndpoint: "",
+    /* Quote form delivery — requests are emailed to the address at the end
+       of this link (free service by formsubmit.co, no account needed).
+       To send them somewhere else, change the email address at the end.
+       Set to "" to fall back to opening the visitor's email app instead.    */
+    formEndpoint: "https://formsubmit.co/ajax/garylamrealty@outlook.com",
   },
 
   /* ---------- 4. HEADLINE NUMBERS (glass cards near the top) ------------ */
