@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sign Installation</title>
+  <meta name="description" content="Professional sign installation services.">
+  <meta name="theme-color" content="#08090b">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2308090b'/%3E%3Cpath d='M18 54V10M18 14h32M26 14v8M44 14v8' stroke='%23ffb547' stroke-width='4' stroke-linecap='round' fill='none'/%3E%3Crect x='22' y='22' width='26' height='18' rx='2' fill='%23ffb547'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=6">
+  <script src="config.js?v=6"></script>
+  <script src="i18n.js?v=6"></script>
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  } }
+  </script>
+</head>
+<body class="is-loading">
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <span class="loader__label mono" data-i18n="loader">Leveling</span>
+      <div class="loader__level"><span class="loader__bubble"></span></div>
+      <span class="loader__pct mono" id="loaderPct">0%</span>
+    </div>
+  </div>
+
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__logo" data-bind="business.name"></a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#services" data-i18n="nav.services">Services</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#process" data-i18n="nav.process">Process</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav__right">
+      <a class="nav__phone mono" data-tel><span class="dot"></span><span data-bind="contact.phone"></span></a>
+      <div class="lang" role="group" aria-label="Language / 语言">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+      <a href="#contact" class="btn btn--sm btn--accent nav__cta" data-i18n="cta.quote">Get a quote</a>
+      <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav>
+      <a href="#services" data-i18n="nav.services">Services</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#estimate" data-i18n="nav.estimate">Estimate</a>
+      <a href="#process" data-i18n="nav.process">Process</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="mobile-menu__contact">
+      <a data-tel class="mono" data-bind="contact.phone"></a>
+      <span class="mono" data-show="contact.wechat"><span data-i18n="wechat">WeChat</span>: <span data-bind="contact.wechat"></span></span>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" id="hero" data-3d>
+      <div class="hero__meta mono">
+        <span>(01)</span>
+        <span data-bind="contact.serviceArea"></span>
+      </div>
+      <div class="hero__bottom">
+        <h1 class="hero__title">
+          <span class="line"><span data-bind="hero.line1"></span></span>
+          <span class="line line--accent"><span data-bind="hero.line2"></span></span>
+        </h1>
+        <div class="hero__side">
+          <p class="hero__sub" data-bind="hero.sub"></p>
+          <div class="hero__ctas">
+            <a href="#estimate" class="btn btn--accent"><span data-i18n="hero.estimate">Estimate my install</span> <i class="arrow">→</i></a>
+            <a href="#pricing" class="btn btn--ghost" data-i18n="hero.prices">See prices</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero__scroll mono"><span class="hero__scroll-line"></span><span data-i18n="hero.scroll">Scroll to install</span></div>
+      <div class="hero__badge mono" id="heroBadge"></div>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div class="ticker__track" id="ticker"></div></div>
+
+    <!-- STATS -->
+    <section class="stats" id="stats" data-3d>
+      <div class="stats__intro">
+        <p class="eyebrow mono" data-i18n="stats.eyebrow">(02) By the numbers</p>
+        <h2 class="display reveal" data-i18n-html="stats.title"></h2>
+      </div>
+      <div class="stats__grid" id="statsGrid"></div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services section" id="services">
+      <div class="section__head">
+        <p class="eyebrow mono" data-i18n="services.eyebrow"></p>
+        <h2 class="display reveal" data-i18n-html="services.title"></h2>
+        <p class="section__lede" data-i18n="services.lede"></p>
+      </div>
+      <div class="services__grid" id="servicesGrid"></div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing section section--light" id="pricing">
+      <div class="section__head">
+        <p class="eyebrow mono" data-i18n="pricing.eyebrow"></p>
+        <h2 class="display reveal" data-i18n-html="pricing.title"></h2>
+        <p class="section__lede" data-i18n="pricing.lede"></p>
+      </div>
+      <div class="packages" id="packages"></div>
+
+      <div class="price-table-wrap">
+        <div class="price-table__head">
+          <h3 data-i18n="pricing.listTitle"></h3>
+          <span class="mono muted" data-i18n="pricing.listNote"></span>
+        </div>
+        <table class="price-table" id="priceTable"></table>
+      </div>
+
+      <div class="estimator" id="estimate">
+        <div class="estimator__form">
+          <p class="eyebrow mono" data-i18n="est.eyebrow"></p>
+          <h3 class="estimator__title" data-i18n="est.title"></h3>
+
+          <fieldset>
+            <legend class="mono" data-i18n="est.q1"></legend>
+            <div class="chips" id="estService"></div>
+          </fieldset>
+
+          <fieldset id="estSizeField">
+            <legend class="mono"><span id="estSizeLabel"></span> <output id="estSizeOut" class="est-out"></output></legend>
+            <input type="range" id="estSize" min="4" max="200" step="1" value="24">
+            <div class="range-ticks mono"><span data-i18n="est.small"></span><span data-i18n="est.medium"></span><span data-i18n="est.large"></span><span data-i18n="est.huge"></span></div>
+          </fieldset>
+
+          <div class="est-row">
+            <fieldset>
+              <legend class="mono" data-i18n="est.q3"></legend>
+              <div class="select"><select id="estHeight"></select></div>
+            </fieldset>
+            <fieldset>
+              <legend class="mono" data-i18n="est.q4"></legend>
+              <div class="select"><select id="estSurface"></select></div>
+            </fieldset>
+          </div>
+
+          <fieldset>
+            <legend class="mono" data-i18n="est.q5"></legend>
+            <div class="checks" id="estExtras"></div>
+          </fieldset>
+        </div>
+
+        <aside class="estimator__result">
+          <div class="result-card">
+            <div class="result-card__top mono"><span data-i18n="est.result"></span><span class="live"><span class="dot"></span><span data-i18n="est.live"></span></span></div>
+            <div class="result-card__price" id="estPrice">$0</div>
+            <div class="result-card__range mono" id="estRange"></div>
+            <ul class="result-card__lines" id="estLines"></ul>
+            <a href="#contact" class="btn btn--accent btn--block" id="estSend"><span data-i18n="est.send"></span> <i class="arrow">→</i></a>
+            <p class="result-card__fine" data-bind="estimator.disclaimer"></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PROCESS (pinned; drives the 3D story) -->
+    <section class="process" id="process" data-3d>
+      <div class="process__sticky">
+        <div class="process__head">
+          <p class="eyebrow mono" data-i18n="process.eyebrow"></p>
+          <h2 class="display" data-i18n-html="process.title"></h2>
+        </div>
+        <div class="process__steps" id="processSteps"></div>
+        <div class="process__hud mono">
+          <span id="hudStep">01</span>
+          <div class="process__bar"><span id="hudBar"></span></div>
+          <span id="hudTotal">05</span>
+        </div>
+        <div class="process__readout mono" id="readout">
+          <div><span data-i18n="ro.level"></span><b id="roLevel">0.00°</b></div>
+          <div><span data-i18n="ro.anchors"></span><b id="roAnchors">0/0</b></div>
+          <div><span data-i18n="ro.circuit"></span><b id="roCircuit">OFF</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="why section" id="why">
+      <div class="section__head">
+        <p class="eyebrow mono" data-i18n="why.eyebrow"></p>
+        <h2 class="display reveal" data-i18n-html="why.title"></h2>
+      </div>
+      <div class="why__grid" id="whyGrid"></div>
+      <div class="quotes" id="quotes"></div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq section" id="faq">
+      <div class="faq__layout">
+        <div class="section__head section__head--sticky">
+          <p class="eyebrow mono" data-i18n="faq.eyebrow"></p>
+          <h2 class="display reveal" data-i18n-html="faq.title"></h2>
+          <p class="section__lede"><span data-i18n="faq.lede"></span> <a data-tel data-bind="contact.phone"></a></p>
+        </div>
+        <div class="faq__list" id="faqList"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact section" id="contact">
+      <div class="contact__glow" aria-hidden="true"></div>
+      <p class="eyebrow mono" data-i18n="contact.eyebrow"></p>
+      <h2 class="contact__title reveal" data-i18n-html="contact.title"></h2>
+
+      <div class="contact__layout">
+        <div class="contact__info">
+          <div class="contact__person" data-show="contact.person">
+            <span class="contact__avatar" id="avatar"></span>
+            <div><b data-bind="contact.person"></b><span class="mono muted" data-i18n="contact.personRole"></span></div>
+          </div>
+          <a class="contact__big" data-tel>
+            <span class="mono muted" data-i18n="contact.call"></span>
+            <span data-bind="contact.phone"></span>
+          </a>
+          <button type="button" class="contact__big contact__wechat" id="wechatCopy" data-show="contact.wechat">
+            <span class="mono muted"><span data-i18n="wechat"></span> <span class="copy-hint" data-i18n="contact.tapCopy"></span></span>
+            <span><span class="wechat-icon" aria-hidden="true"></span><span data-bind="contact.wechat"></span></span>
+          </button>
+          <a class="contact__big" data-mail data-show="contact.email">
+            <span class="mono muted" data-i18n="contact.email"></span>
+            <span data-bind="contact.email"></span>
+          </a>
+          <div class="contact__meta">
+            <div>
+              <span class="mono muted" data-i18n="contact.hours"></span>
+              <dl id="hours"></dl>
+            </div>
+            <div>
+              <span class="mono muted" data-i18n="contact.where"></span>
+              <p data-bind="contact.address"></p>
+              <p class="muted" data-bind="contact.serviceArea"></p>
+            </div>
+          </div>
+          <div class="socials" id="socials"></div>
+        </div>
+
+        <form class="quote-form" id="quoteForm" novalidate>
+          <div class="quote-form__head">
+            <h3 data-i18n="form.title"></h3>
+            <span class="mono muted" data-bind="contact.responseTime"></span>
+          </div>
+          <div class="field-row">
+            <label class="field"><span data-i18n="form.name"></span><input name="name" autocomplete="name" required></label>
+            <label class="field"><span data-i18n="form.phone"></span><input name="phone" type="tel" autocomplete="tel" required></label>
+          </div>
+          <label class="field"><span data-i18n="form.email"></span><input name="email" type="email" autocomplete="email"></label>
+          <label class="field"><span data-i18n="form.service"></span>
+            <div class="select"><select name="service" id="formService"></select></div>
+          </label>
+          <label class="field"><span data-i18n="form.location"></span><input name="location" autocomplete="address-level2"></label>
+          <label class="field"><span data-i18n="form.message"></span><textarea name="message" rows="4" data-i18n-placeholder="form.messagePh"></textarea></label>
+          <div class="form-estimate mono" id="formEstimateView" hidden></div>
+          <button class="btn btn--accent btn--block" type="submit"><span data-i18n="form.send"></span> <i class="arrow">→</i></button>
+          <p class="form-status mono" id="formStatus" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__top">
+      <p class="footer__tag" data-bind="business.tagline"></p>
+      <a href="#top" class="btn btn--ghost btn--sm" data-i18n="footer.top"></a>
+    </div>
+    <div class="footer__word" id="footerWord" aria-hidden="true"></div>
+    <div class="footer__bottom mono">
+      <span>© <span id="year"></span> <span data-bind="business.name"></span></span>
+      <span><span data-i18n="footer.licensed"></span> <span data-bind="business.founded"></span></span>
+      <a data-tel data-bind="contact.phone"></a>
+    </div>
+  </footer>
+
+  <div class="action-bar" id="actionBar">
+    <a data-tel class="action-bar__call" data-i18n="bar.call">Call now</a>
+    <a href="#contact" class="action-bar__quote" data-i18n="bar.quote">Free quote</a>
+  </div>
+
+  <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js?v=6"></script>
+  <script type="module" src="scene.js?v=6"></script>
+</body>
+</html>
