@@ -445,13 +445,14 @@
 
   /* ---------------- Scroll: nav, HUD, shared progress for 3D ---------------- */
   const SCROLL = (window.SCROLL = { hero: 0, stats: 0, process: 0, processVisible: false, anyVisible: true });
+  const navCanHide = matchMedia("(min-width: 1101px)");
   let lastY = 0, lastStep = -1, scrollFrame = null, scrollDirection = 0, directionStartY = 0;
   function onScroll() {
     const y = Math.max(0, scrollY), vh = innerHeight;
     const nav = $("#nav");
     nav.classList.toggle("is-scrolled", y > 40);
     const menuOpen = $("#mobileMenu").classList.contains("is-open");
-    if (menuOpen || y <= vh) nav.classList.remove("is-hidden");
+    if (menuOpen || y <= vh || !navCanHide.matches) nav.classList.remove("is-hidden");
     const delta = y - lastY;
     if (delta !== 0) {
       const direction = Math.sign(delta);
@@ -460,7 +461,7 @@
         directionStartY = lastY;
       }
       const directionTravel = Math.abs(y - directionStartY);
-      if (!menuOpen && y > vh && scrollDirection > 0 && directionTravel >= 24) nav.classList.add("is-hidden");
+      if (navCanHide.matches && !menuOpen && y > vh && scrollDirection > 0 && directionTravel >= 24) nav.classList.add("is-hidden");
       if (scrollDirection < 0 && directionTravel >= 12) nav.classList.remove("is-hidden");
     }
     lastY = y;
