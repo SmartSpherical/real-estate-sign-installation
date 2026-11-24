@@ -445,7 +445,7 @@
 
   /* ---------------- Scroll: nav, HUD, shared progress for 3D ---------------- */
   const SCROLL = (window.SCROLL = { hero: 0, stats: 0, process: 0, processVisible: false, anyVisible: true });
-  let lastY = 0, lastStep = -1;
+  let lastY = 0, lastStep = -1, scrollFrame = null;
   function onScroll() {
     const y = scrollY, vh = innerHeight;
     const nav = $("#nav");
@@ -487,6 +487,13 @@
     $$(".nav__links a").forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === "#" + current));
   }
   const clamp = (v) => Math.max(0, Math.min(1, v));
+  const scheduleScroll = () => {
+    if (scrollFrame !== null) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = null;
+      onScroll();
+    });
+  };
 
   /* ---------------- Structured data for Google ---------------- */
   function jsonLd() {
@@ -504,8 +511,8 @@
   /* ---------------- Boot ---------------- */
   render();
   bind();
-  addEventListener("scroll", onScroll, { passive: true });
-  addEventListener("resize", onScroll);
+  addEventListener("scroll", scheduleScroll, { passive: true });
+  addEventListener("resize", scheduleScroll);
   onScroll();
 
   // loader: wait for fonts + 3D (or give up after 3.5s)

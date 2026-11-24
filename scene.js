@@ -37,7 +37,7 @@ if (renderer) init().catch(fail);
 
 async function init() {
   try { await Promise.race([document.fonts.load('800 100px "Inter Tight"'), new Promise((r) => setTimeout(r, 2500))]); } catch {}
-  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.25 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -261,8 +261,15 @@ async function init() {
   /* ---------- animation ---------- */
   const t0 = performance.now();
   let smoothP = 0;
+  let framePending = false;
   const v3 = new THREE.Vector3();
   ready();
+
+  function scheduleFrame() {
+    if (framePending) return;
+    framePending = true;
+    requestAnimationFrame(frame);
+  }
 
   function applyExplode(k, time) {
     for (const [name, [off, rot]] of Object.entries(EXP)) {
@@ -274,7 +281,7 @@ async function init() {
   }
 
   function frame(now) {
-    requestAnimationFrame(frame);
+    framePending = false;
     const sc = SC();
     if (document.hidden || !sc.anyVisible) return;
     const time = (now - t0) / 1000;
@@ -439,8 +446,14 @@ async function init() {
     dust.rotation.y = time * 0.02;
 
     composer.render();
+    scheduleFrame();
   }
-  requestAnimationFrame(frame);
+  addEventListener("scroll", scheduleFrame, { passive: true });
+  addEventListener("resize", scheduleFrame);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && SC().anyVisible) scheduleFrame();
+  });
+  scheduleFrame();
 }
 
 /* ---------------- textures & helpers ---------------- */
